@@ -3,6 +3,8 @@ package com.github.binarywang.demo.wx.pay.domain;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,6 +21,7 @@ import lombok.Data;
 public class MyOrder {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
@@ -26,7 +29,7 @@ public class MyOrder {
     private String openId;
 
     @Column(name = "service_id")
-    private String serviceId;
+    private Integer serviceId;
 
     @Column(name = "out_trade_no")
     private String outTradeNo;
@@ -36,6 +39,5 @@ public class MyOrder {
 
     @Column(name = "update_time")
     private Date updateTime;
-
 
 }

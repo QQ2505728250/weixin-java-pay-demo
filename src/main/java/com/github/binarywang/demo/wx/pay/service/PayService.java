@@ -2,15 +2,23 @@ package com.github.binarywang.demo.wx.pay.service;
 
 
 import java.math.BigDecimal;
+import java.util.Date;
 
+import javax.transaction.Transactional;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.github.binarywang.demo.wx.pay.domain.MyOrder;
 import com.github.binarywang.demo.wx.pay.domain.MyService;
 import com.github.binarywang.demo.wx.pay.domain.request.PayRequestDTO;
 import com.github.binarywang.demo.wx.pay.exception.PayException;
 import com.github.binarywang.demo.wx.pay.repository.MyOrderRepository;
 import com.github.binarywang.demo.wx.pay.repository.MyServiceRepository;
+import com.github.binarywang.demo.wx.pay.utils.JsonUtil;
 import com.github.binarywang.demo.wx.pay.utils.UUIDUtil;
+import com.github.binarywang.wxpay.bean.request.WxPayOrderCloseRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -21,10 +29,14 @@ import com.github.binarywang.wxpay.service.WxPayService;
  * @author denghaijing
  */
 @Service
+@Transactional
 public class PayService {
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PayService.class);
 
     @Autowired
     private WxPayService wxService;
+
 
     @Autowired
     private MyOrderRepository myOrderRepository;
@@ -47,11 +59,11 @@ public class PayService {
         //由dto.getOpenId() 、服务价格 、outTradeNo 入库（订单表）
 
         //生成终端IP返回
-        String spbillCreateIp = "123.12.12.153343523";
+        String spbillCreateIp = "123.12.12.123";
 
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setBody(body);
-        request.setNotifyUrl("http://localhost:8082/pay/test");
+        request.setNotifyUrl("http://mifyr2.natappfree.cc/test/pay/notify");
         request.setOpenid(dto.getOpenId());
         request.setOutTradeNo(outTradeNo);
         request.setSpbillCreateIp(spbillCreateIp);
@@ -62,7 +74,25 @@ public class PayService {
         try {
             o = this.wxService.createOrder(request);
         } catch (WxPayException e) {
-            throw new PayException(e.getReturnCode(), e.getReturnMsg());
+            //当异常，直接关闭微信服务端的订单；因为sdk关闭订单接口对订单状态或是否存在无要求，所以无需查询订单接口
+//            WxPayOrderCloseRequest closeRequest = new WxPayOrderCloseRequest();
+//            closeRequest.setOutTradeNo(outTradeNo);
+//            this.wxService.closeOrder(closeRequest);
+            LOGGER.error("ReturnCode:{},ReturnMsg:{}" + e.getReturnCode(), e.getReturnMsg());
+            throw new PayException("服务器连接超时，稍候重试");
+        }
+
+        //订单入库
+        MyOrder myOrder = new MyOrder();
+        myOrder.setOpenId(dto.getOpenId());
+        myOrder.setOutTradeNo(outTradeNo);
+        myOrder.setServiceId(dto.getServiceId());
+        myOrder.setCreateTime(new Date());
+        myOrder.setUpdateTime(new Date());
+        MyOrder saveMyOrder = this.myOrderRepository.save(myOrder);
+        System.out.println(JsonUtil.toJson(saveMyOrder));
+        if (saveMyOrder == null) {
+            throw new RuntimeException("保存订单异常");
         }
         return o;
     }

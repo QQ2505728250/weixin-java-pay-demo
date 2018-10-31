@@ -7,21 +7,14 @@ package com.github.binarywang.demo.wx.pay.exception;
  */
 public class PayException extends RuntimeException {
 
-    private final String returnCode;
 
-    private final String returnMsg;
+    private final String msg;
 
-    public PayException(String returnCode, String returnMsg) {
-        //初始化类内的全局变量。
-        this.returnCode = returnCode;
-        this.returnMsg = returnMsg;
+    public PayException(String msg) {
+        this.msg = msg;
     }
 
-    public String getReturnCode() {
-        return returnCode;
-    }
-
-    public String getReturnMsg() {
-        return returnMsg;
+    public String getMsg() {
+        return msg;
     }
 }

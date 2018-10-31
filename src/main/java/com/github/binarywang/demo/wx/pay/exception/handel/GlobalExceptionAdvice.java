@@ -22,7 +22,6 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(PayException.class)
     @ResponseBody
     public ResponseEntity<ErrorDTO> handlePayException(PayException e) {
-        String errMsg = "ReturnCode:" + e.getReturnCode() + ",ReturnMsg:" + e.getReturnMsg();
-        return ResponseEntity.ok().body(new ErrorDTO(errMsg));
+        return ResponseEntity.ok().body(new ErrorDTO(e.getMsg()));
     }
 }
