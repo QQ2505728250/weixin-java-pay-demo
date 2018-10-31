@@ -1,50 +1,71 @@
 package com.github.binarywang.demo.wx.pay.service;
 
+
 import java.math.BigDecimal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.github.binarywang.demo.wx.pay.bean.MyOrder;
-import com.github.binarywang.demo.wx.pay.bean.OrderRequestDTO;
+import com.github.binarywang.demo.wx.pay.domain.MyService;
+import com.github.binarywang.demo.wx.pay.domain.request.PayRequestDTO;
+import com.github.binarywang.demo.wx.pay.repository.MyOrderRepository;
+import com.github.binarywang.demo.wx.pay.repository.MyServiceRepository;
+import com.github.binarywang.demo.wx.pay.utils.UUIDUtil;
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.exception.WxPayException;
+import com.github.binarywang.wxpay.service.WxPayService;
 
 /**
- * TODO 〈一句话功能简述〉
- * <p>
- * 〈功能详细描述〉 描述
+ * 测试支付总流程service层
  *
  * @author denghaijing
- * @see [相关类/方法][可选]
- * @since [产品/模块版本] 2018/10/29
  */
 @Service
 public class PayService {
 
-    public Object order(OrderRequestDTO dto) {
+    @Autowired
+    private WxPayService wxService;
 
+    @Autowired
+    private MyOrderRepository myOrderRepository;
+
+    @Autowired
+    private MyServiceRepository myServiceRepository;
+
+    public Object order(PayRequestDTO dto) {
         //根据dto.getServiceId()查询服务 serviceBean
-
+        MyService myService = this.myServiceRepository.findById(dto.getServiceId()).get();
         // 得到服务价格
-        Integer price = 1;
+        Integer price = new BigDecimal(myService.getPrice()).multiply(new BigDecimal("100")).intValue();
 
         //服务描述
-        String body = "服务描述";
+        String body = myService.getDetails();
 
         //生成商户订单号入库
-        String outTradeNo = "201810291660949702";
+        String outTradeNo = UUIDUtil.generateUUID();
 
         //由dto.getOpenId() 、服务价格 、outTradeNo 入库（订单表）
 
         //生成终端IP返回
         String spbillCreateIp = "123.12.12.123";
 
-        //组装返回数据
-        MyOrder myOrder = new MyOrder();
-        myOrder.setBody(body);
-        myOrder.setNotifyUrl("http://localhost:8082/pay/test");
-        myOrder.setOpenid(dto.getOpenId());
-        myOrder.setOutTradeNo(outTradeNo);
-        myOrder.setSpbillCreateIp(spbillCreateIp);
-        myOrder.setTotalFee(price);
-        myOrder.setTradeType("JSAPI");
-        return myOrder;
+        WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
+        request.setBody(body);
+        request.setNotifyUrl("http://localhost:8082/pay/test");
+        request.setOpenid(dto.getOpenId());
+        request.setOutTradeNo(outTradeNo);
+        request.setSpbillCreateIp(spbillCreateIp);
+        request.setTotalFee(price);
+        request.setTradeType("JSAPI");
+
+        Object o = null;
+        try {
+            o = this.wxService.createOrder(request);
+        } catch (WxPayException e) {
+            e.printStackTrace();
+        }
+
+
+        return o;
     }
+
 }

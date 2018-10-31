@@ -192,7 +192,7 @@ public class WxPayController {
   }
 
   /**
-   * TODO 此方法需要改造，根据实际需要返回com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse对象
+   * TODO 此方法需要改造，根据实际需要返回com.github.binarywang.wxpay.domain.notify.WxPayNotifyResponse对象
    */
   @ApiOperation(value = "支付回调通知处理")
   @PostMapping("/parseOrderNotifyResult")
@@ -201,7 +201,7 @@ public class WxPayController {
   }
 
   /**
-   * TODO 此方法需要改造，根据实际需要返回com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse对象
+   * TODO 此方法需要改造，根据实际需要返回com.github.binarywang.wxpay.domain.notify.WxPayNotifyResponse对象
    */
   @ApiOperation(value = "退款回调通知处理")
   @PostMapping("/parseRefundNotifyResult")
