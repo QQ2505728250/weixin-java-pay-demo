@@ -6,7 +6,6 @@ import java.util.Date;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import com.github.binarywang.demo.wx.pay.repository.MyOrderRepository;
 import com.github.binarywang.demo.wx.pay.repository.MyServiceRepository;
 import com.github.binarywang.demo.wx.pay.utils.JsonUtil;
 import com.github.binarywang.demo.wx.pay.utils.UUIDUtil;
-import com.github.binarywang.wxpay.bean.request.WxPayOrderCloseRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -55,8 +53,6 @@ public class PayService {
 
         //生成商户订单号入库
         String outTradeNo = UUIDUtil.generateUUID();
-
-        //由dto.getOpenId() 、服务价格 、outTradeNo 入库（订单表）
 
         //生成终端IP返回
         String spbillCreateIp = "123.12.12.123";
