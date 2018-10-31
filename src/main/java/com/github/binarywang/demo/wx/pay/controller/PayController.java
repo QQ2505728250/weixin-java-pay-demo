@@ -1,12 +1,14 @@
 package com.github.binarywang.demo.wx.pay.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.github.binarywang.demo.wx.pay.domain.request.PayRequestDTO;
 import com.github.binarywang.demo.wx.pay.service.PayService;
+import com.github.binarywang.demo.wx.pay.utils.ErrorDTO;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -38,9 +40,9 @@ public class PayController {
      * @return
      */
     @PostMapping("/order")
-    public Object order(@RequestBody PayRequestDTO dto) {
+    public ResponseEntity<Object> order(@RequestBody PayRequestDTO dto) {
         Object order = this.payService.order(dto);
-        return order;
+        return ResponseEntity.ok().body(order);
     }
 
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.binarywang.demo.wx.pay.domain.MyService;
 import com.github.binarywang.demo.wx.pay.domain.request.PayRequestDTO;
+import com.github.binarywang.demo.wx.pay.exception.PayException;
 import com.github.binarywang.demo.wx.pay.repository.MyOrderRepository;
 import com.github.binarywang.demo.wx.pay.repository.MyServiceRepository;
 import com.github.binarywang.demo.wx.pay.utils.UUIDUtil;
@@ -46,7 +47,7 @@ public class PayService {
         //由dto.getOpenId() 、服务价格 、outTradeNo 入库（订单表）
 
         //生成终端IP返回
-        String spbillCreateIp = "123.12.12.123";
+        String spbillCreateIp = "123.12.12.153343523";
 
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setBody(body);
@@ -61,10 +62,8 @@ public class PayService {
         try {
             o = this.wxService.createOrder(request);
         } catch (WxPayException e) {
-            e.printStackTrace();
+            throw new PayException(e.getReturnCode(), e.getReturnMsg());
         }
-
-
         return o;
     }
 
