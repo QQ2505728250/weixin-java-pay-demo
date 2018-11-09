@@ -1,0 +1,42 @@
+spring:
+    datasource:
+        url: jdbc:mysql://120.25.100.93:3306/weixin_pay_test?useUnicode=true&characterEncoding=utf-8
+        driver-class-name: com.mysql.jdbc.Driver
+        username: root
+        password: dhj123456
+        # 使用druid数据源
+        type: com.alibaba.druid.pool.DruidDataSource
+        druid:
+            initialSize: 1    # 初始化大小
+            minIdle: 1    # 最小
+            maxActive: 10   # 最大
+            maxWait: 6000   # 连接等待超时的时间
+            timeBetweenEvictionRunsMillis: 6000   # 间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+            minEvictableIdleTimeMillis: 30000   # 连接在池中最小生存的时间，单位是毫秒
+            testWhileIdle: true
+            testOnBorrow: true
+            testOnReturn: true
+            validationQuery: SELECT 1 from dual
+    jpa:
+        database-platform: org.hibernate.dialect.MySQLDialect
+        database: MySQL
+        properties:
+            hibernate:
+                format_sql: true
+                show_sql: true
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.github.binarywang.demo.wx.pay: DEBUG
+    com.github.binarywang.wxpay: DEBUG
+
+wx:
+  pay:
+    appId: wx99285903f308b094
+    mchId: 1503185681
+    mchKey: zhangyujianzhibaron0668285878100
+    keyPath: classpath:cert/apiclient_cert.p12
+
+server:
+  port: 8080
