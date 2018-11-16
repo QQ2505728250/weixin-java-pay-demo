@@ -1,6 +1,8 @@
 package com.github.binarywang.demo.wx.pay.utils;
 
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -30,13 +32,15 @@ public class MergeImagesUtil {
 //        //调用方法生成图片
 //        byte[] b = mergeImages(qrCodeImageFile, bi);
 //        System.out.println(b.length);
-        BufferedImage bi = buildBufferedImage(430, 100, "广工大学招聘活动小程序码", 1.0);
+        BufferedImage bi = buildBufferedImage(430, 100, "广工大学招聘活动小程序码招聘活动小程序码", 1.5);
 
 //        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 //        String[] fontFamilies = ge.getAvailableFontFamilyNames();
 //        for (String s : fontFamilies) {
 //            System.out.println(s);
 //        }
+
+//        test01();
 
     }
 
@@ -134,7 +138,7 @@ public class MergeImagesUtil {
         //设置画笔
         g2.setPaint(Color.RED);
         //设置字体
-        g2.setFont(FontsUtil.getMyFont("simkai.ttf",18.0f));
+        g2.setFont(FontsUtil.getSimsun(10, 20.0f));  //20影响 tempX 的递增量  ， 同时rate间距比率也影响，，，tempX 的递增量 = 20.0*rate
 
         // 抗锯齿
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -142,24 +146,87 @@ public class MergeImagesUtil {
         //居中显示
         int x = (int) (width / 2 - rate * g2.getFontMetrics().stringWidth(text) / 2);
         int y = height / 2 + g2.getFontMetrics().getHeight() / 3;
+
         String tempStr;
         int orgStringWight = g2.getFontMetrics().stringWidth(text);
         int orgStringLength = text.length();
-        int tempX = x;
+        //当第一个字x轴为负值时，重置为0
+        int tempX = x < 0 ? 0 : x;
         int tempY = y;
+
+        System.out.println("第一个字x轴:" + tempX);
+        System.out.println("第一个字y轴:" + tempY);
+//        if(text.length())
         while (text.length() > 0) {
+            //取得第一个字
             tempStr = text.substring(0, 1);
+            //总字数减一
             text = text.substring(1, text.length());
+            System.out.println("tempStr画文字:  " + tempStr);
+            //画文字
             g2.drawString(tempStr, tempX, tempY);
+//            int hh1 = tempX;
+            System.out.println("文字tempX坐标:  " + tempX);
             tempX = (int) (tempX + (double) orgStringWight / (double) orgStringLength * rate);
+//            int hh2 = tempX;
+            //当文字tempX坐标超图片总长度时
+//            if (tempX + (hh2 - hh1) > width) {
+//                System.out.println("---------------这个字超出:  " + tempStr);
+//            }
+//            System.out.println("每一个字间距：" + (hh2 - hh1));
+
         }
 
+
 //        //输出到指定磁盘目录,可安全删除
-//        ImageIO.write(bi, "png", new File("D:/imgs/test2/name.png"));
+        ImageIO.write(bi, "png", new File("D:/imgs/test2/name.png"));
 
         g2.dispose();
 
         return bi;
+    }
+
+    public static void test01() {
+        int width = 50;
+        int height = 100;
+        String s = "广工大学招聘活动小程序码";
+
+        File file = new File("D:/imgs/test2/build.jpg");
+
+        Font font = FontsUtil.getMyFont("simkai.ttf", 18.0f);
+        //创建一个画布
+        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        //获取画布的画笔
+        Graphics2D g2 = (Graphics2D) bi.getGraphics();
+
+        //开始绘图
+        g2.setBackground(Color.WHITE);
+        g2.clearRect(0, 0, width, height);
+        g2.setPaint(new Color(0, 0, 255));
+        g2.fillRect(0, 0, 100, 10);
+        g2.setPaint(new Color(253, 2, 0));
+        g2.fillRect(0, 10, 100, 10);
+        g2.setPaint(Color.red);
+
+
+        FontRenderContext context = g2.getFontRenderContext();
+        Rectangle2D bounds = font.getStringBounds(s, context);
+        double x = (width - bounds.getWidth()) / 2;
+        double y = (height - bounds.getHeight()) / 2;
+        double ascent = -bounds.getY();
+        double baseY = y + ascent;
+
+        //绘制字符串
+        g2.drawString(s, (int) x, (int) baseY);
+
+        try {
+            //将生成的图片保存为jpg格式的文件。ImageIO支持jpg、png、gif等格式
+            ImageIO.write(bi, "jpg", file);
+        } catch (IOException e) {
+            System.out.println("生成图片出错........");
+            e.printStackTrace();
+        }
+
     }
 
 

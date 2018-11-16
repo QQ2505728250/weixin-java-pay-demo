@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.binarywang.demo.wx.pay.domain.request.PayRequestDTO;
 import com.github.binarywang.demo.wx.pay.service.PayService;
+import com.github.binarywang.demo.wx.pay.utils.FontsUtil;
 import com.github.binarywang.demo.wx.pay.utils.JsonUtil;
 import com.github.binarywang.demo.wx.pay.utils.MergeImagesUtil;
 import com.github.binarywang.demo.wx.pay.utils.StreamUtil;
@@ -46,6 +47,7 @@ public class OtherTestController {
     @ResponseBody
     public void test() throws IOException {
         BufferedImage bi = MergeImagesUtil.buildBufferedImage(427, 100, "广工大学招聘活动小程序码", 1.0);
+//        ImageIO.write(bi, "png", new File("D:/imgs/test2/name.png"));
         ImageIO.write(bi, "png", new File("/usr/local/test/name.png"));
     }
 
@@ -62,5 +64,19 @@ public class OtherTestController {
         return list;
     }
 
+
+    @GetMapping("/font01")
+    @ResponseBody
+    public void font01() throws IOException {
+        Font font1 = FontsUtil.getSimsun(10, 30.0f);
+        System.out.println(font1);
+    }
+
+    @GetMapping("/font02")
+    @ResponseBody
+    public void font02() throws IOException {
+        Font font2 = FontsUtil.getMyFont("simkai.ttf",30.0f);
+        System.out.println(font2);
+    }
 
 }
