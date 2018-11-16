@@ -22,14 +22,22 @@ public class MergeImagesUtil {
 
     public static void main(String[] args) throws IOException {
 
-        //模拟已生成的小程序码File
-        File qrCodeImageFile = new File("D:/imgs/test/01.png");
+//        //模拟已生成的小程序码File
+//        File qrCodeImageFile = new File("D:/imgs/test2/test.jpg");
+//
+//        BufferedImage bi = buildBufferedImage(ImageIO.read(qrCodeImageFile).getWidth(), 100, "广工大学招聘活动小程序码", 1.0);
+//
+//        //调用方法生成图片
+//        byte[] b = mergeImages(qrCodeImageFile, bi);
+//        System.out.println(b.length);
+        BufferedImage bi = buildBufferedImage(430, 100, "广工大学招聘活动小程序码", 1.0);
 
-        BufferedImage bi = buildBufferedImage(ImageIO.read(qrCodeImageFile).getWidth(), 100, "广工大学招聘活动小程序码", 1.0);
+//        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//        String[] fontFamilies = ge.getAvailableFontFamilyNames();
+//        for (String s : fontFamilies) {
+//            System.out.println(s);
+//        }
 
-        //调用方法生成图片
-        byte[] b = mergeImages(qrCodeImageFile, bi);
-        System.out.println(b.length);
     }
 
 
@@ -87,7 +95,7 @@ public class MergeImagesUtil {
             }
 
             //输出到指定磁盘目录,可安全删除
-            ImageIO.write(imageNew, "png", new File("D:/imgs/test/build.png"));
+            ImageIO.write(imageNew, "png", new File("D:/imgs/test2/build.png"));
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(imageNew, "png", baos);
@@ -114,7 +122,7 @@ public class MergeImagesUtil {
      * @param rate   文字行距
      * @return BufferedImage
      */
-    public static BufferedImage buildBufferedImage(Integer width, Integer height, String text, Double rate) {
+    public static BufferedImage buildBufferedImage(Integer width, Integer height, String text, Double rate) throws IOException {
 
         //RGB形式
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -126,7 +134,10 @@ public class MergeImagesUtil {
         //设置画笔
         g2.setPaint(Color.RED);
         //设置字体
-        g2.setFont(new Font("宋体", Font.BOLD, 18));
+        g2.setFont(FontsUtil.getMyFont("simkai.ttf",18.0f));
+
+        // 抗锯齿
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         //居中显示
         int x = (int) (width / 2 - rate * g2.getFontMetrics().stringWidth(text) / 2);
@@ -142,6 +153,9 @@ public class MergeImagesUtil {
             g2.drawString(tempStr, tempX, tempY);
             tempX = (int) (tempX + (double) orgStringWight / (double) orgStringLength * rate);
         }
+
+//        //输出到指定磁盘目录,可安全删除
+//        ImageIO.write(bi, "png", new File("D:/imgs/test2/name.png"));
 
         g2.dispose();
 

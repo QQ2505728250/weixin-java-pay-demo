@@ -39,4 +39,6 @@ wx:
     keyPath: classpath:cert/apiclient_cert.p12
 
 server:
-  port: 8080
+  port: 8999
+  servlet:
+    context-path: /pay

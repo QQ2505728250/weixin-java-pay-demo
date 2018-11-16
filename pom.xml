@@ -12,7 +12,7 @@
     <groupId>com.github.binarywang</groupId>
     <version>1.0.0-SNAPSHOT</version>
     <artifactId>weixin-java-pay-demo</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>spring-boot-demo-for-wechat-pay</name>
     <description>微信支付 Demo with Spring Boot</description>
