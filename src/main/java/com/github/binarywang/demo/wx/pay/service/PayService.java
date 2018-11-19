@@ -59,7 +59,7 @@ public class PayService {
 
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
         request.setBody(body);
-        request.setNotifyUrl("http://mifyr2.natappfree.cc/test/pay/notify");
+        request.setNotifyUrl("http://ipqr9z.natappfree.cc/test/pay/notify");
         request.setOpenid(dto.getOpenId());
         request.setOutTradeNo(outTradeNo);
         request.setSpbillCreateIp(spbillCreateIp);
@@ -83,6 +83,7 @@ public class PayService {
         myOrder.setOpenId(dto.getOpenId());
         myOrder.setOutTradeNo(outTradeNo);
         myOrder.setServiceId(dto.getServiceId());
+        myOrder.setState(1);
         myOrder.setCreateTime(new Date());
         myOrder.setUpdateTime(new Date());
         MyOrder saveMyOrder = this.myOrderRepository.save(myOrder);

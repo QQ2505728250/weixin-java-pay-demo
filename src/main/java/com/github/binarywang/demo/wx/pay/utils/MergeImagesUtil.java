@@ -22,7 +22,7 @@ public class MergeImagesUtil {
 
     public static void main(String[] args) throws IOException {
 
-        BufferedImage bi = buildBufferedImage(430, 100, "广工大学招聘活动小程序码招聘活动", 1.0);
+        BufferedImage bi = buildBufferedImage(430, 100, "招聘活动小程序码招聘活动招聘活动小程序码招聘活动招聘活动小程序码招聘活动", 1.0);
 
     }
 

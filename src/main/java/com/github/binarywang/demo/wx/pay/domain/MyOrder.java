@@ -31,6 +31,9 @@ public class MyOrder {
     @Column(name = "service_id")
     private Integer serviceId;
 
+    @Column(name = "state")
+    private Integer state;
+
     @Column(name = "out_trade_no")
     private String outTradeNo;
 

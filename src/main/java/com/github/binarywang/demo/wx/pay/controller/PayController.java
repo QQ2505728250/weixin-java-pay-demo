@@ -1,7 +1,6 @@
 package com.github.binarywang.demo.wx.pay.controller;
 
 import java.io.IOException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import com.github.binarywang.demo.wx.pay.config.WxPayProperties;
 import com.github.binarywang.demo.wx.pay.domain.request.PayRequestDTO;
 import com.github.binarywang.demo.wx.pay.service.PayService;
 import com.github.binarywang.demo.wx.pay.utils.JsonUtil;
 import com.github.binarywang.demo.wx.pay.utils.StreamUtil;
+import com.github.binarywang.demo.wx.pay.utils.WxPayUtil;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -37,6 +38,9 @@ public class PayController {
 
     @Autowired
     private PayService payService;
+
+    @Autowired
+    private WxPayProperties wxPayProperties;
 
     @Autowired
     public PayController(WxPayService wxService) {
@@ -68,17 +72,27 @@ public class PayController {
     @PostMapping("/notify")
     public void notify(HttpServletRequest request, HttpServletResponse response) throws IOException, WxPayException {
         String read = StreamUtil.read(request.getInputStream());
+
+        System.out.println("read:" + read);
+
         WxPayOrderNotifyResult notifyResult = this.wxService.parseOrderNotifyResult(read);
         System.out.println(JsonUtil.toJson(notifyResult));
 
-        //1、支付状态
+        notifyResult.getResultCode();
+        //1、判断是否通信成功，若通信失败不走以下程序
         if (!"SUCCESS".equals(notifyResult.getReturnCode())) {
-            LOGGER.error("网络异常");
+            LOGGER.warn("服务器网络异常");
+            return;
+        }
+        //2、检验签名
+        if (!WxPayUtil.checkSign(notifyResult,wxPayProperties.getMchKey())){
+            LOGGER.warn("签名不正确");
             return;
         }
 
-        //2、支付金额
-        //3、支付人（下单人 == 支付人）可选
+        //3、支付状态
+        //4、支付金额
+        //5、支付人（下单人 == 支付人）可选
 
         //向微信服务器响应成功处理
 //        response.getWriter().append(new StringBuffer("<xml><return_code>SUCCESS</return_code><return_msg>OK</return_msg></xml>").toString());
