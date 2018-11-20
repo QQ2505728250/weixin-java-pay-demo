@@ -37,6 +37,9 @@ public class MyOrder {
     @Column(name = "out_trade_no")
     private String outTradeNo;
 
+    @Column(name = "is_valid")
+    private Integer isValid;
+
     @Column(name = "create_time")
     private Date createTime;
 

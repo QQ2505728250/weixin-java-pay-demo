@@ -8,10 +8,17 @@ import com.github.binarywang.demo.wx.pay.domain.MyOrder;
 
 
 /**
- * 服务数据层仓库
+ * 订单数据层仓库
  *
  * @author denghaijing
  */
 public interface MyOrderRepository extends JpaRepository<MyOrder, Integer>, PagingAndSortingRepository<MyOrder, Integer> {
 
+    /**
+     * 根据商户订单号查询订单
+     *
+     * @param outTradeNo 商户订单号
+     * @return MyOrder
+     */
+    public MyOrder findByOutTradeNo(String outTradeNo);
 }

@@ -61,11 +61,10 @@ public class FontsUtil {
 
 
     public static void main(String[] args) {
-        Font font1 = getSimsun(10, 30.0f);
-        System.out.println(font1);
+//        Font font1 = getSimsun(10, 30.0f);
+//        System.out.println(font1);
 //        Font font2 = getMyFont("simkai.ttf",30.0f);
 //        System.out.println(font2);
-
 
     }
 

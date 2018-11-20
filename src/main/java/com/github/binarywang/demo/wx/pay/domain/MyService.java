@@ -1,5 +1,6 @@
 package com.github.binarywang.demo.wx.pay.domain;
 
+import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +26,7 @@ public class MyService {
     private Integer id;
 
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 
     @Column(name = "details")
     private String details;
