@@ -31,6 +31,9 @@ public class MyOrder {
     @Column(name = "service_id")
     private Integer serviceId;
 
+    @Column(name = "total_fee")
+    private Integer totalFee;
+
     @Column(name = "state")
     private Integer state;
 

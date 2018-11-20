@@ -1,7 +1,5 @@
 package com.github.binarywang.demo.wx.pay.utils;
 
-import java.math.BigDecimal;
-
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 
 /**
@@ -31,16 +29,7 @@ public class WxPayUtil {
                 + "&return_code=" + result.getReturnCode() + "&time_end=" + result.getTimeEnd()
                 + "&total_fee=" + result.getTotalFee() + "&trade_type=" + result.getTradeType()
                 + "&transaction_id=" + result.getTransactionId() + "&key=" + mchKey;
-
         if (!result.getSign().equals(MD5Util.MD5Encode(validateSign).toUpperCase())) {
-            return false;
-        }
-        return true;
-    }
-
-    public static boolean validateTotalFee(int totalFee, BigDecimal orderPrice) {
-        int price = orderPrice.multiply(new BigDecimal("100")).intValue();
-        if (totalFee != price) {
             return false;
         }
         return true;
