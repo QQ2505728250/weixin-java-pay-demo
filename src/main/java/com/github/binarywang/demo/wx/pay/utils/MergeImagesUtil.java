@@ -22,7 +22,7 @@ public class MergeImagesUtil {
 
     public static void main(String[] args) throws IOException {
 
-        BufferedImage bi = buildBufferedImage(430, 100, "招聘活动小程序码招聘活动招聘活动小程序码招聘活动招聘活动小程序码招聘活动", 1.0);
+        BufferedImage bi = buildBufferedImage(430, 100, "ppis员工测评——ppis员工测评ppis员工测评", 1.0);
 
     }
 
@@ -138,23 +138,25 @@ public class MergeImagesUtil {
         //当第一个字x轴为负值时，重置为0
         int tempX = x < 0 ? 0 : x;
         int tempY = y;
-        //文字间距
-        double spacing = (double) orgStringWight / (double) orgStringLength * rate;
+//        //文字间距
+//        double spacing = (double) orgStringWight / (double) orgStringLength * rate;
 
-        while (text.length() > 0) {
-            //取得第一个字
-            tempStr = text.substring(0, 1);
-            //总文本数减一个
-            text = text.substring(1, text.length());
-            //画文字
-            g2.drawString(tempStr, tempX, tempY);
-            tempX = (int) (tempX + spacing);
-            //自动换行，重新设置参数
-            if ((tempX + spacing) > width ) {
-                tempX = 0;
-                tempY = tempY + 20;
-            }
-        }
+        g2.drawString(text, tempX, tempY);
+
+//        while (text.length() > 0) {
+//            //取得第一个字
+//            tempStr = text.substring(0, 1);
+//            //总文本数减一个
+//            text = text.substring(1, text.length());
+//            //画文字
+//            g2.drawString(tempStr, tempX, tempY);
+//            tempX = (int) (tempX + spacing);
+//            //自动换行，重新设置参数
+//            if ((tempX + spacing) > width ) {
+//                tempX = 0;
+//                tempY = tempY + 20;
+//            }
+//        }
 
         //输出到指定磁盘目录,可安全删除
         ImageIO.write(bi, "png", new File("D:/imgs/test2/name.png"));
